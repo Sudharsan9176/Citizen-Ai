@@ -1,0 +1,215 @@
+<!-- CHAT.HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Citizen AI</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Background */
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #fce4ec, #ede7f6);
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #ffcc80;
+        }
+
+        .card.wide-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0d47a1;
+            margin-bottom: 1.5rem;
+        }
+
+        .chat-container {
+            margin-bottom: 2rem;
+        }
+
+        .chat-message {
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            max-width: 90%;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .user-message {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .ai-message {
+            background: #f3e5f5;
+            border: 1px solid #ce93d8;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .message-label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            border-radius: 8px;
+            padding: 0.8rem;
+            border: 1px solid #bbb;
+            resize: vertical;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #0d47a1;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #1565c0;
+        }
+
+        .examples {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f9f9ff;
+            border-radius: 8px;
+            border-left: 5px solid #0d47a1;
+        }
+        .examples h4 {
+            margin-bottom: 0.8rem;
+            color: #0d47a1;
+        }
+        .examples ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            color: #444;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.2rem;
+            background: #0d47a1;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto;">
+            <a href="/dashboard" class="logo">Citizen AI</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/chat">Chat</a></li>
+                    <li><a href="/feedback">Feedback</a></li>
+                    <li><a href="/admin">Admin</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main style="flex: 1;">
+        <div class="container" style="max-width: 900px; margin: auto;">
+            <div class="card wide-card">
+                <h2>🤖 AI Chat Assistant</h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                    Ask me anything about Indian government services, laws, and civic procedures. I'm here to help!
+                </p>
+
+                {% if user_message and ai_response %}
+                <div class="chat-container">
+                    <div class="chat-message user-message">
+                        <div class="message-label">You asked:</div>
+                        <div>{{ user_message }}</div>
+                    </div>
+                    
+                    <div class="chat-message ai-message">
+                        <div class="message-label">AI Response:</div>
+                        <div>{{ ai_response }}</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <form method="post" action="/chat">
+                    <div class="form-group">
+                        <label for="message"><strong>Your Question:</strong></label>
+                        <textarea id="message" name="message" placeholder="Ask me about government services, legal procedures, citizen rights, or any civic query..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-full" style="margin-top: 1rem;">Send Message</button>
+                </form>
+
+                <div class="examples">
+                    <h4>💡 Example Questions:</h4>
+                    <ul>
+                        <li>How do I apply for a passport in India?</li>
+                        <li>What are my rights under the Indian Constitution?</li>
+                        <li>How can I file a complaint against government services?</li>
+                        <li>What documents do I need for Aadhaar card?</li>
+                        <li>How do I register for voter ID?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Citizen AI. Empowering Indian Citizens with AI Technology.</p>
+    </footer>
+</body>
+</html>
